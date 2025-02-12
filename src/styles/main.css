@@ -1,8 +1,6 @@
-@charset "UTF-8";
 @font-face {
   font-family: "Montserrat";
-  src: url("../styles/Montserrat/Montserrat-VariableFont_wght.ttf")
-    format("truetype");
+  src: url("../styles/Montserrat/Montserrat-VariableFont_wght.ttf") format("truetype");
   font-weight: 100 900;
   font-style: normal;
 }
@@ -23,9 +21,7 @@
 @media (max-width: 768px) {
   .container {
     flex-direction: column;
-    /* Изменяем направление на колонку */
     align-items: center;
-    /*  Центрируем элементы  */
     justify-content: center;
   }
 }
@@ -114,7 +110,6 @@ header .header__by {
   background-repeat: no-repeat;
   background-size: contain;
   cursor: pointer;
-  /* Added */
 }
 
 header .header__profile {
@@ -321,7 +316,6 @@ header .header__by {
   .categories {
     width: 100%;
     position: relative;
-    /* Отключаем sticky */
     top: auto;
     height: auto;
     margin-top: 20px;
@@ -389,7 +383,6 @@ header .header__by {
 @media (max-width: 768px) {
   .cards_block {
     grid-template-columns: 1fr;
-    /* Одна колонка на таблетках и ниже */
     padding-top: 20px;
   }
 }
@@ -481,44 +474,33 @@ header .header__by {
 @media (max-width: 768px) {
   .container {
     flex-direction: column;
-    /* Изменяем направление на колонку */
     align-items: center;
-    /* Центрируем элементы */
   }
   .img-slider {
     height: 500px;
-    /* Уменьшаем высоту слайдера */
   }
   .promo__block-first,
-  .promo__block-second {
+.promo__block-second {
     display: none;
-    /* Скрываем промоблоки */
   }
   .category__container {
     transform: translateX(0);
-    /* Убираем смещение */
   }
   .cards__container {
     transform: translateX(0);
-    /* Убираем смещение */
   }
   .list__container {
     transform: translateX(0);
-    /* Убираем смещение */
   }
   .categories {
     width: 100%;
-    /* Растягиваем категории на всю ширину */
     position: relative;
-    /* Убираем sticky */
     top: auto;
-    /* Сбрасываем top */
     height: auto;
     margin-top: 20px;
   }
   .cards_block {
     grid-template-columns: 1fr;
-    /* Одна колонка */
     padding-top: 20px;
   }
   .cards_item {
@@ -533,13 +515,10 @@ header .header__by {
 }
 
 @media (max-width: 480px) {
-  /* Дополнительные стили для мобильных устройств */
   header .header__logo {
     font-size: 1.2rem;
-    /* Уменьшаем размер логотипа */
   }
   .img-slider {
     height: 300px;
-    /* Ещё меньше высота слайдера */
   }
 }

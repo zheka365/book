@@ -24,8 +24,8 @@ $font-family: "Montserrat";
   display: flex;
 
   @media (max-width: 768px) {
-    flex-direction: column; /* Изменяем направление на колонку */
-    align-items: center; /*  Центрируем элементы  */
+    flex-direction: column; 
+    align-items: center; 
     justify-content: center;
   }
 }
@@ -114,7 +114,7 @@ header {
   .header__by {
     background-repeat: no-repeat;
     background-size: contain;
-    cursor: pointer; /* Added */
+    cursor: pointer; 
   }
 
   .header__profile {
@@ -317,7 +317,7 @@ header {
 
   @media (max-width: 768px) {
     width: 100%;
-    position: relative; /* Отключаем sticky */
+    position: relative; 
     top: auto;
     height: auto;
     margin-top: 20px;
@@ -380,7 +380,7 @@ header {
   flex-wrap: wrap;
 
   @media (max-width: 768px) {
-    grid-template-columns: 1fr; /* Одна колонка на таблетках и ниже */
+    grid-template-columns: 1fr;
     padding-top: 20px;
   }
 }
@@ -472,41 +472,41 @@ header {
 
 @media (max-width: 768px) {
   .container {
-    flex-direction: column; /* Изменяем направление на колонку */
-    align-items: center; /* Центрируем элементы */
+    flex-direction: column; 
+    align-items: center; 
   }
 
   .img-slider {
-    height: 500px; /* Уменьшаем высоту слайдера */
+    height: 500px; 
   }
 
   .promo__block-first,
   .promo__block-second {
-    display: none; /* Скрываем промоблоки */
+    display: none; 
   }
 
   .category__container {
-    transform: translateX(0); /* Убираем смещение */
+    transform: translateX(0); 
   }
 
   .cards__container {
-    transform: translateX(0); /* Убираем смещение */
+    transform: translateX(0); 
   }
 
   .list__container {
-    transform: translateX(0); /* Убираем смещение */
+    transform: translateX(0); 
   }
 
   .categories {
-    width: 100%; /* Растягиваем категории на всю ширину */
-    position: relative; /* Убираем sticky */
-    top: auto; /* Сбрасываем top */
+    width: 100%; 
+    position: relative;
+    top: auto; 
     height: auto;
     margin-top: 20px;
   }
 
   .cards_block {
-    grid-template-columns: 1fr; /* Одна колонка */
+    grid-template-columns: 1fr; 
     padding-top: 20px;
   }
 
@@ -523,12 +523,12 @@ header {
 }
 
 @media (max-width: 480px) {
-  /* Дополнительные стили для мобильных устройств */
+  
   header .header__logo {
-    font-size: 1.2rem; /* Уменьшаем размер логотипа */
+    font-size: 1.2rem; 
   }
 
   .img-slider {
-    height: 300px; /* Ещё меньше высота слайдера */
+    height: 300px; 
   }
 }
