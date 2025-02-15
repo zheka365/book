@@ -9,6 +9,25 @@ document.addEventListener("DOMContentLoaded", () => {
   const categoriesLink = document.querySelectorAll(".categories_link");
   const cardsBlock = document.querySelector(".cards_block");
   const loadBtn = document.querySelector(".load_btn");
+  const cartCounter = document.querySelector(".cart_counter"); 
+
+
+  const CART_KEY = "cart";
+
+
+  // Получаем корзину из LocalStorage
+  function getCart() {
+    const cartString = localStorage.getItem(CART_KEY);
+    return cartString ? JSON.parse(cartString) : {}; 
+  }
+
+  // Сохраняем корзину в LocalStorage
+  function saveCart(cart) {
+    localStorage.setItem(CART_KEY, JSON.stringify(cart));
+  }
+
+  // Инициализация корзины при загрузке страницы
+  const initialCart = getCart();
 
   // Данные
   const appState = {
@@ -16,8 +35,8 @@ document.addEventListener("DOMContentLoaded", () => {
       ? parseInt(localStorage.getItem("activeCategoryIndex"), 10)
       : 0,
     startIndex: 0,
-    cartItems: {},
-    cartCount: 0,
+    cartItems: initialCart, 
+    cartCount: Object.keys(initialCart).length, 
     params: new URLSearchParams({
       key: "AIzaSyAersGrpFzMRiU9ntCg4mdgDGPQFrULqOI",
       printType: "books",
@@ -93,6 +112,12 @@ document.addEventListener("DOMContentLoaded", () => {
       const card = document.createElement("div");
       card.classList.add("cards_item", "book_card");
       card.setAttribute("data-book-id", book.id);
+
+      // Проверяем, есть ли книга в корзине и устанавливаем текст кнопки
+      const isInCart = appState.cartItems[book.id];
+      const buttonText = isInCart ? "Delete from cart" : "Buy now";
+      const buttonClass = isInCart ? "info_btn active" : "info_btn";
+
       card.innerHTML = `<img src=${thumbnail} alt="book cover" class="card_img">
             <div class="card_info">
                  <div class="info_author">${authors}</div>
@@ -103,10 +128,11 @@ document.addEventListener("DOMContentLoaded", () => {
                   </div>
                   <p class="info_text">${description}</p>
                    <div class="info_cost">${price}</div>
-                    <button class="info_btn">buy now</button>
+                    <button class="${buttonClass}" data-book-id="${book.id}">${buttonText}</button>
                 </div>`;
       cardsBlock.appendChild(card);
     });
+    activateBtns();
   };
 
   const setActiveCategory = () => {
@@ -143,61 +169,80 @@ document.addEventListener("DOMContentLoaded", () => {
     appState.params.set("startIndex", appState.startIndex);
     loadBooks();
   };
-  const initialLoad = async () => {
-    setActiveCategory();
-    await loadBooks();
-  };
 
-  initialLoad();
-  activateBtns();
-  categoriesLink.forEach((link, index) => {
-    link.addEventListener("click", () => handleCategoryClick(index));
-  });
-
-  loadBtn.addEventListener("click", handleLoadMoreClick);
-
-  // CART
   const toggleCartItem = (btn, card, bookId, cartCounter) => {
     if (!appState.cartItems[bookId]) {
       appState.cartItems[bookId] = true;
       appState.cartCount++;
       btn.textContent = "Delete from cart";
       btn.classList.add("active");
-      cartCounter.style.display = "block";
     } else {
       delete appState.cartItems[bookId];
       appState.cartCount--;
       btn.textContent = "Buy now";
       btn.classList.remove("active");
-      if (appState.cartCount === 0) {
-        cartCounter.style.display = "none";
-      }
     }
-    cartCounter.textContent = appState.cartCount;
+    // Сохраняем корзину в LocalStorage
+    saveCart(appState.cartItems);
+    updateCartCounter();
   };
 
-  // Функция activateBtns
-  function activateBtns() {
-    const cardsBlock = document.querySelector(".cards_block");
-    const cartCounter = document.querySelector(".cart_counter");
-    if (!cardsBlock || !cartCounter) {
-      console.error("Не найден элемент .cards_block или .cart_counter");
-      return;
+  const updateCartCounter = () => {
+    cartCounter.textContent = appState.cartCount;
+    cartCounter.style.display = appState.cartCount > 0 ? "block" : "none";
+  };
+
+  const activateBtns = () => {
+    const cards = document.querySelectorAll(".cards_item");
+    if (cards && cards.length > 0) {
+      cards.forEach((card) => {
+        const btn = card.querySelector(".info_btn");
+        const bookId = card.dataset.bookId;
+
+        if (btn) {
+          btn.addEventListener("click", (event) => {
+            event.stopPropagation();
+            toggleCartItem(btn, card, bookId, cartCounter);
+          });
+          // Обновляем текст и класс кнопки в зависимости от состояния корзины
+          if (appState.cartItems[bookId]) {
+            btn.textContent = "Delete from cart";
+            btn.classList.add("active");
+          } else {
+            btn.textContent = "Buy now";
+            btn.classList.remove("active");
+          }
+        }
+      });
     }
-    cardsBlock.addEventListener("click", function (event) {
-      if (!event.target.matches(".info_btn")) return;
-      const btn = event.target;
-      const card = btn.closest(".cards_item");
-      if (!card) {
-        console.error("Не найдена карточка (.cards_item)", btn);
-        return;
-      }
-      const bookId = card.dataset.bookId || card.id;
-      if (!bookId) {
-        console.error("Не найден id для книги", card);
-        return;
-      }
-      toggleCartItem(btn, card, bookId, cartCounter);
+  };
+
+  const initialLoad = async () => {
+    setActiveCategory();
+    updateCartCounter();
+    await loadBooks();
+  };
+
+  initialLoad();
+  categoriesLink.forEach((link, index) => {
+    link.addEventListener("click", () => handleCategoryClick(index));
+  });
+
+  loadBtn.addEventListener("click", handleLoadMoreClick);
+
+  const cardsBlockElement = document.querySelector(".cards_block"); 
+
+if (cardsBlockElement) { 
+    cardsBlockElement.addEventListener("click", function(event) {
+        if (event.target.classList.contains("info_btn")) {
+            const btn = event.target;
+            const card = btn.closest(".cards_item"); 
+            const bookId = card.dataset.bookId;
+            toggleCartItem(btn, card, bookId, cartCounter);
+        }
     });
-  }
+} else {
+    console.error("Element with class 'cards_block' not found");
+}
+
 });
